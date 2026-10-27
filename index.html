@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Playlist Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #111;
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+      color: #222;
+    }
+    .box {
+      border: 1px solid #777;
+      background-color: #ffffff;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+    }
+    table, th, td {
+      border: 1px solid #444;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #ddd;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    label {
+      display: inline-block;
+      width: 90px;
+    }
+    input[type="text"] {
+      padding: 4px;
+      width: 200px;
+    }
+    button {
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .now-playing-panel {
+      background-color: #ffffcc;
+      border: 1px solid #cccc66;
+    }
+    .active-row {
+      background-color: #d1e7dd;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Music Playlist Manager</h1>
+
+  <!-- Now Playing Section -->
+  <div class="box now-playing-panel">
+    <h2>Now Playing</h2>
+    <p id="now-playing-text">No song playing.</p>
+    <p>Total Songs in Playlist: <strong id="total-count">0</strong></p>
+    <div>
+      <button id="btn-prev">< Previous</button>
+      <button id="btn-next">Next ></button>
+    </div>
+  </div>
+
+  <!-- Search & Play Section -->
+  <div class="box">
+    <h3>Search Song</h3>
+    <input type="text" id="search-input" placeholder="Enter Song ID or Title">
+    <button id="btn-search">Search & Play</button>
+    <span id="search-feedback" style="margin-left: 10px;"></span>
+  </div>
+
+  <!-- Add Song Form -->
+  <div class="box">
+    <h3>Add New Song</h3>
+    <form id="add-song-form">
+      <div class="form-group">
+        <label for="song-id">Song ID:</label>
+        <input type="text" id="song-id" required>
+      </div>
+      <div class="form-group">
+        <label for="song-title">Title:</label>
+        <input type="text" id="song-title" required>
+      </div>
+      <div class="form-group">
+        <label for="song-artist">Artist:</label>
+        <input type="text" id="song-artist" required>
+      </div>
+      <div class="form-group">
+        <label for="song-duration">Duration:</label>
+        <input type="text" id="song-duration" placeholder="e.g. 3:45" required>
+      </div>
+      <button type="submit">Add Song to Playlist</button>
+    </form>
+  </div>
+
+  <!-- Playlist Table -->
+  <div class="box">
+    <h3>Current Playlist</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="playlist-table-body">
+        <!-- Rendered dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
