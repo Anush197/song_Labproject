@@ -19,17 +19,7 @@ class Playlist {
     this.current = null; // Node currently active/playing
   }
 
-  /**
-   * Appends a new song node to the end of the circular linked list.
-   * 
-   * Pointer updates during insertion:
-   * 1. If list is empty: head and current point to newNode; newNode.next and newNode.prev point to self.
-   * 2. If list is non-empty: tail is head.prev.
-   *    - tail.next -> newNode
-   *    - newNode.prev -> tail
-   *    - newNode.next -> head
-   *    - head.prev -> newNode
-   */
+
   addSong(id, title, artist, duration) {
     const newNode = new SongNode(id, title, artist, duration);
 
@@ -41,29 +31,18 @@ class Playlist {
       return;
     }
 
-    // In a doubly circular linked list, head.prev always points to the last node (tail)
     const tail = this.head.prev;
 
-    // Link current tail to new node
     tail.next = newNode;
     newNode.prev = tail;
 
-    // Link new node back to head to maintain circular structure
     newNode.next = this.head;
     this.head.prev = newNode;
   }
 
-  /**
-   * Removes a song node matching the given ID or Title.
-   * 
-   * Pointer updates during deletion:
-   * 1. Locate target node by traversing pointers starting from head.
-   * 2. If single node exists: head and current set to null.
-   * 3. If multiple nodes exist:
-   *    - prevNode.next -> targetNode.next
-   *    - nextNode.prev -> targetNode.prev
-   * 4. If head or current points to targetNode, reassign them to targetNode.next.
-   */
+  
+    // Removes a song node matching the given ID or Title
+   
   removeSong(id_or_title) {
     if (this.head === null) return false;
 
@@ -119,9 +98,7 @@ class Playlist {
     return true;
   }
 
-  /**
-   * Traverses circular list from head and returns an array of node references for UI rendering.
-   */
+  
   getAllSongs() {
     const result = [];
     if (this.head === null) return result;
@@ -135,9 +112,7 @@ class Playlist {
     return result;
   }
 
-  /**
-   * Advances current pointer to current.next.
-   */
+  
   playNext() {
     if (this.current !== null) {
       this.current = this.current.next;
@@ -145,9 +120,7 @@ class Playlist {
     return this.current;
   }
 
-  /**
-   * Moves current pointer back to current.prev.
-   */
+  
   playPrev() {
     if (this.current !== null) {
       this.current = this.current.prev;
@@ -178,9 +151,9 @@ class Playlist {
     return null;
   }
 
-  /**
-   * Counts total nodes by following circular pointer links until returning to head.
-   */
+  
+  //  Counts total nodes by following circular pointer links until returning to head.
+   
   getTotalCount() {
     if (this.head === null) return 0;
 
@@ -195,40 +168,29 @@ class Playlist {
   }
 }
 
-// ============================================================================
-// 2. DOM INTERACTION & UI UPDATES
-// ============================================================================
 
-// Instantiate playlist instance
 const myPlaylist = new Playlist();
 
-// Seed initial sample data
 myPlaylist.addSong("101", "Bohemian Rhapsody", "Queen", "5:55");
 myPlaylist.addSong("102", "Hotel California", "Eagles", "6:30");
 myPlaylist.addSong("103", "Stairway to Heaven", "Led Zeppelin", "8:02");
 
-/**
- * Re-renders all dynamic UI elements when linked list state changes.
- */
+
 function renderUI() {
   const nowPlayingText = document.getElementById("now-playing-text");
   const totalCountEl = document.getElementById("total-count");
   const tableBody = document.getElementById("playlist-table-body");
 
-  // Update total count using linked list traversal count
   totalCountEl.textContent = myPlaylist.getTotalCount();
 
-  // Update Now Playing UI block
   if (myPlaylist.current) {
     nowPlayingText.innerHTML = `ID: <strong>${myPlaylist.current.song_id}</strong> | Title: <strong>"${myPlaylist.current.title}"</strong> | Artist: <strong>${myPlaylist.current.artist}</strong> | Duration: <strong>${myPlaylist.current.duration}</strong>`;
   } else {
     nowPlayingText.textContent = "No song playing / Playlist is empty.";
   }
 
-  // Clear current table rows
   tableBody.innerHTML = "";
 
-  // Retrieve nodes via getAllSongs traversal
   const songs = myPlaylist.getAllSongs();
 
   if (songs.length === 0) {
@@ -238,7 +200,6 @@ function renderUI() {
     return;
   }
 
-  // Build table rows directly from linked list nodes
   songs.forEach((node) => {
     const tr = document.createElement("tr");
     const isPlaying = myPlaylist.current && myPlaylist.current.song_id === node.song_id;
@@ -261,19 +222,16 @@ function renderUI() {
   });
 }
 
-// Event Handler: Play Previous Song
 document.getElementById("btn-prev").addEventListener("click", () => {
   myPlaylist.playPrev();
   renderUI();
 });
 
-// Event Handler: Play Next Song
 document.getElementById("btn-next").addEventListener("click", () => {
   myPlaylist.playNext();
   renderUI();
 });
 
-// Event Handler: Search and Play Song
 document.getElementById("btn-search").addEventListener("click", () => {
   const inputVal = document.getElementById("search-input").value;
   const feedbackEl = document.getElementById("search-feedback");
@@ -295,7 +253,6 @@ document.getElementById("btn-search").addEventListener("click", () => {
   renderUI();
 });
 
-// Event Handler: Form Submission to Add New Song
 document.getElementById("add-song-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -312,7 +269,6 @@ document.getElementById("add-song-form").addEventListener("submit", (e) => {
   }
 });
 
-// Global Function for dynamic table button removal logic
 function handleRemoveSong(songId) {
   myPlaylist.removeSong(songId);
   renderUI();
